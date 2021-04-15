@@ -1,0 +1,25 @@
+#
+####### example-requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+requests
+os
+#nose-cov
+#beautifulsoup4
+#
+###### Requirements with Version Specifiers ######
+#   See https://www.python.org/dev/peps/pep-0440/#version-specifiers
+#docopt == 0.6.1             # Version Matching. Must be version 0.6.1
+#keyring >= 4.1.1            # Minimum version 4.1.1
+#coverage != 3.5             # Version Exclusion. Anything except version 3.5
+#Mopidy-Dirble ~= 1.1        # Compatible release. Same as >= 1.1, == 1.*
+#
+
+${API_TOKEN}
+# Since version 10, pip supports the use of environment variables inside the requirements file. 
+# You can now store sensitive data (tokens, keys, etc.) in environment variables and only 
+# specify the variable name for your requirements, letting pip lookup the value at runtime.
+
+# You have to use the POSIX format for variable names including brackets around the uppercase name
+# as shown in this example: ${API_TOKEN}. pip will attempt to find the 
+# corresponding environment variable defined on the host system at runtime.

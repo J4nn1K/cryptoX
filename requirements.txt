@@ -3,7 +3,6 @@
 #
 ###### Requirements without Version Specifiers ######
 requests
-os
 #nose-cov
 #beautifulsoup4
 #
@@ -15,7 +14,7 @@ os
 #Mopidy-Dirble ~= 1.1        # Compatible release. Same as >= 1.1, == 1.*
 #
 
-${API_TOKEN}
+#${API_TOKEN}
 # Since version 10, pip supports the use of environment variables inside the requirements file. 
 # You can now store sensitive data (tokens, keys, etc.) in environment variables and only 
 # specify the variable name for your requirements, letting pip lookup the value at runtime.

@@ -2,6 +2,9 @@ from requests import Request, Session
 import json
 import os
 
+def check_api_keys():
+    return 'CMC_API_KEY' in os.environ # and 'BINANCE_API_KEY' in os.environ and 'BINANCE_SECRET_KEY'
+
 def request_fng():
     url = 'https://api.alternative.me/fng/'
     parameters = {
@@ -68,7 +71,7 @@ def generate_pairs(symbols):
     return pairs
 
 def cryptoX():
-    X = 12     # Amount of Cryptocurrencies to fetch
+    X = 8     # Amount of Cryptocurrencies to fetch
 
     fng_raw = request_fng()
     fng_value, fng_classification= process_fng(fng_raw)
@@ -90,5 +93,7 @@ def cryptoX():
 
     # print(generate_pairs(symbols))
 
-cryptoX() 
-
+if check_api_keys() == True:
+    cryptoX() 
+else:
+    print('API keys not found')

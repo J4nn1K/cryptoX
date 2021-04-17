@@ -104,6 +104,16 @@ def portfolio_percentage(X):
     
     return portfolio_percentages
 
+def calculate_quantity(fiat, percentages, prices):
+    fiat_per_coin = []
+    quantity = []
+    for i in range(len(percentages)):
+        fiat_per_coin.append(percentages[i]/100 * fiat)
+    for i in range(len(fiat_per_coin)):
+        quantity.append(fiat_per_coin[i] / prices[i])
+
+    return fiat_per_coin, quantity
+    
 def create_order(pair, quantity):
     API_KEY = os.environ['BINANCE_API_KEY']
     API_SECRET = os.environ['BINANCE_SECRET_KEY']
@@ -116,7 +126,7 @@ def create_order(pair, quantity):
     return order
 
 def cryptoX():
-    X = 10     # Amount of cryptocurrencies to work with
+    X = 8     # Amount of cryptocurrencies to work with
 
     fng_raw = request_fng()
     fng_value, fng_classification = process_fng(fng_raw)
@@ -129,17 +139,20 @@ def cryptoX():
     
     balance_eur = get_balance(['EUR'])[0]
     portfolio_percentages = portfolio_percentage(X)
+    fiat_per_coin, quantity = calculate_quantity(balance_eur, portfolio_percentages, prices)
+    
     #### Output: Market & Account Data ####
 
-    print('\n{:5s}|{:9s} |{:7s} |{:13s} |{:8s}'.format('', ' Price[€]', ' %[30d]', ' Balance', ' Value[€]'))
-    print('-----|----------|--------|--------------|----------')
+    print('\n{:5s}| {:43s} | Investment Data (using {:6.2f}€)'.format('','Market & Account Data', balance_eur))
+    print('{:5s}| {:8s} | {:6s} | {:12s} | {:8s} | {:6s} | {:8s} | {:12s}'.format('', 'Price[€]', '%[30d]', 'Balance', 'Value[€]', '[%]', '[€]', 'Quantity'))
+    print('-----|----------|--------|--------------|----------|--------|----------|--------------')
 
     for i in range(X):
-        print('{:5s}|{:9.2f} |{:7.2f} |{:13.8f} |{:8.2f} |{:4.2f}'.format(symbols[i], prices[i], change[i], balances[i], values[i], portfolio_percentages[i]))
+        print('{:4s} | {:8.2f} | {:6.2f} | {:12.8f} | {:8.2f} | {:6.2f} | {:8.2f} | {:12.8f}'.format(
+            symbols[i], prices[i], change[i], balances[i], values[i], portfolio_percentages[i], fiat_per_coin[i], quantity[i])
+            )
 
     print('\nCurrent Fear & Greed Index: {}, {:s}\n'.format(fng_value, fng_classification))
-    
-    print('available: {:7.2f}€'.format(balance_eur))
 
     #### Order ####
     

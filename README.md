@@ -9,4 +9,4 @@ API Keys should be stored as environment variables;
 - Binance API Key: `BINANCE_API_KEY` 
 - Binance Secret Key: `BINANCE_SECRET_KEY`
 ## Errors
-Something with: `Server is ahead` - resync the OS clock
+`APIError(code=-1021): Timestamp for this request was 1000ms ahead of the server's time.` - resync OS clock

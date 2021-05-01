@@ -19,6 +19,14 @@ def get_prices(pairs):
 
     return prices
 
+def get_balance(asset):
+    API_KEY = os.environ['BINANCE_API_KEY']
+    API_SECRET = os.environ['BINANCE_SECRET_KEY']
+    client = Client(API_KEY, API_SECRET)
+
+    balance = client.get_asset_balance(asset=asset)
+    return float(balance['free'])
+
 def calculate_quantity(fiat, percentages, prices):
     fiat_per_coin = []
     quantity = []
@@ -45,29 +53,32 @@ def cryptoX():
     #### PARAMETERS ####
     
     pairs = ['BTCEUR', 'ETHEUR', 'BNBEUR', 'XRPEUR']
-    percentages = [50, 30, 10, 10]
+    percentages = [50, 30, 10, 10] # vielleicht noch was mit der Marktkapitalisierung der einzelnen Coins berechnen
     fiat = 100
 
     #### CALCULATIONS ####
     
     prices = get_prices(pairs)
     investment, quantities = calculate_quantity(fiat, percentages, prices)
+    fiat_available = get_balance('EUR')
 
     print('\n    | Price    | %  | €     | Quantity   ')
     print('----|----------|----|-------|------------')
     for i in range(len(pairs)):
-        print('{:3s} | {:8.2f} | {:2.0f} | {:4.2f} | {:9.8f}'.format(
+        print('{:3s} | {:8.2f} | {:2.0f} | {:5.2f} | {:9.8f}'.format(
             pairs[i][:3], prices[i], percentages[i], investment[i], quantities[i]
         ))
     
-    #### Order ####
+    print('\nAvailable: {:.2f}€'.format(fiat_available))
+    
+    #### ORDER ####
     
     q = input('\nDo you want to place market orders with {:.2f}€? (y/n) '.format(fiat))
 
     if q == 'y':
         for i in range(len(pairs)):
-            place_order(pairs[i], quantities[i])
-
+            print(place_order(pairs[i], quantities[i]))
+            # Soll noch in Datei exportiert werden
     else:
         pass
 

@@ -28,6 +28,21 @@ def get_balance(asset):
     balance = client.get_asset_balance(asset=asset)
     return float(balance['free'])
 
+def get_decimal_places(pairs):
+    API_KEY = os.environ['BINANCE_API_KEY']
+    API_SECRET = os.environ['BINANCE_SECRET_KEY']
+    client = Client(API_KEY, API_SECRET)
+    
+    decimal_places=[]
+    
+    for pair in pairs:
+        info = client.get_symbol_info(pair)
+        minQty = float(info['filters'][2]['minQty'])
+        stepSize = float(info['filters'][2]['stepSize'])
+        decimal_places.append(int(-log10(stepSize)))
+    
+    return decimal_places
+
 def calculate_quantity(fiat, percentages, prices, decimal_places):
     fiat_per_coin = []
     quantity = []
@@ -48,21 +63,6 @@ def place_order(pair, quantity):
         quantity=quantity)
 
     return order
-
-def get_decimal_places(pairs):
-    API_KEY = os.environ['BINANCE_API_KEY']
-    API_SECRET = os.environ['BINANCE_SECRET_KEY']
-    client = Client(API_KEY, API_SECRET)
-    
-    decimal_places=[]
-    
-    for pair in pairs:
-        info = client.get_symbol_info(pair)
-        minQty = float(info['filters'][2]['minQty'])
-        stepSize = float(info['filters'][2]['stepSize'])
-        decimal_places.append(int(-log10(stepSize)))
-    
-    return decimal_places
 
 def get_minQty(pairs):
     API_KEY = os.environ['BINANCE_API_KEY']
@@ -102,7 +102,7 @@ def cryptoX():
             pairs[i][:3], prices[i], percentages[i], investment[i], quantities[i]
         ))
     print('\nAvailable: {:.2f}€'.format(fiat_available))
-    print(get_minQty(pairs))
+    
     #### ORDER ####
     
     q = input('\nDo you want to place market orders with {:.2f}€? (y/n) '.format(fiat))

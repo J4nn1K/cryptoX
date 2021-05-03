@@ -74,6 +74,7 @@ def get_minQty(pairs):
         info = client.get_symbol_info(pair)
         minQty = float(info['filters'][2]['minQty'])
         minQties.append(minQty)
+        print(info)
 
     return minQties
 
@@ -81,12 +82,12 @@ def cryptoX():
     
     #### PARAMETERS ####
     
-    #pairs = ['BTCEUR', 'ETHEUR', 'BNBEUR', 'XRPEUR']
-    #percentages = [50, 30, 10, 10] # vielleicht noch was mit der Marktkapitalisierung der einzelnen Coins berechnen
-    #fiat = 100
-    pairs = ['BNBEUR', 'XRPEUR']
-    percentages = [50, 50] # vielleicht noch was mit der Marktkapitalisierung der einzelnen Coins berechnen
-    fiat = 20
+    pairs = ['BTCEUR', 'ETHEUR', 'BNBEUR', 'XRPEUR']
+    percentages = [50, 30, 10, 10] # vielleicht noch was mit der Marktkapitalisierung der einzelnen Coins berechnen
+    fiat = 100
+
+    # Problem: 'minNotional': '10.00000000' -- Order für 10€ geht nicht durch - müsste evtl minimal erhöht werden
+
     #### CALCULATIONS ####
     
     prices = get_prices(pairs)
